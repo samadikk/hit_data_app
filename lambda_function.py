@@ -72,16 +72,16 @@ class PrepData:
                 keyword = ''.join(keyword)
         return keyword
 
-    def get_revenue(self, plist):
+    def get_revenue(self, elist, plist):
         """
-            Function get_revenue() accepts 'product_list' column from the original dataset
-                and extracts the revenue. It uses inbuilt python split function.
-                Extracted Revenue part is then casted.
-            If the product_list does not contain any revenue
-            the default return value is 0
+            Function get_revenue() accepts 'product_list' and 'event_list' column from the original dataset
+                and extracts the revenue based on purchase (event = 1). It uses inbuilt python split function.
+                Extracted Revenue part is then casted to Float.
+            If the product_list does not contain any revenue or if number_of_items is zero then
+            the default revenue return value is 0
         """
 
-        if not pd.isnull(plist):
+        if elist == 1.0 and not pd.isnull(plist):
             arr = plist.split(';')
             if arr[2] == '' or arr[2] is None:
                 arr[2] = '0'
@@ -144,9 +144,12 @@ class PrepData:
             data['keyword'] = data.groupby(['ip', 'user_agent', 'geo_city', 'geo_region', 'geo_country'])[
                 'keyword'].fillna(method='bfill')
 
-            data['revenue'] = data['product_list'].apply(self.get_revenue)
+            data['revenue'] = data.apply(lambda x: self.get_revenue(x['event_list'], x['product_list']), axis=1)
 
             data_result = data.groupby(['medium', 'keyword'], as_index=False)['revenue'].sum()
+
+            data_result.sort_values(by='revenue')
+
             print("Completed generating aggregated results for original dataset")
 
             # Renaming Columns in Dataframe
