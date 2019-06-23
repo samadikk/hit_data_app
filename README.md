@@ -7,7 +7,7 @@ This repository contains all code files to parse a clickstream data file and gen
 
 a)	Create a new s3 bucket with any name of your choice.
 
-b)	Add a new Lambda Function with name ‘processHitLevelData’ and select python 3.6 as a run time environment. Assign and create full Lambda execution role to his function using AWS IAM.
+b)	Add a new Lambda Function with name ‘processHitLevelData’ and select python 3.6 as a run time environment. Assign and create full Lambda execution role to this function using AWS IAM.
 
 c)	Add a s3 put trigger (bucket from (a)) to the lambda function.
 
@@ -21,4 +21,4 @@ f)	Assign a memory (512 MB) and give value of 3 mins to the timeout field.
 ## How to run the app on AWS:
 a)	Drop the (data.sql) file in the s3 bucket created before to run the app.
 
-b)	A new directory ‘result’ will be created with a report inside the same bucket.
+b)	A new directory ‘result’ will be created with a tab format report in the same bucket.
