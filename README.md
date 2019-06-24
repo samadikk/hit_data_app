@@ -1,6 +1,6 @@
 # hit_data_app
 
-This repository contains all code files to parse a clickstream data file and generate relevant reports. Backend infrastructure for this application is on AWS
+This repository contains all code files to parse a hit data file and generate relevant reports. Back-end infrastructure for this application is AWS
 
 
 ## How to install the app on AWS:
@@ -19,6 +19,6 @@ f)	Assign a memory (512 MB) and give value of 3 mins to the timeout field.
 
  
 ## How to run the app on AWS:
-a)	Drop the (data.sql) file in the s3 bucket created before to run the app.
+a)	Drop (data.sql) file in s3 bucket created before. This will trigger lambda function.
 
 b)	A new directory ‘result’ will be created with a tab format report in the same bucket.
