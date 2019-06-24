@@ -71,23 +71,34 @@ class PrepData:
                 keyword = ''.join(keyword)
         return keyword
     
-    def get_revenue(self,elist,plist): 
+    def get_revenue(self,event,products): 
         """
-            Function get_revenue() accepts 'product_list' and 'event_list' column from the original dataset 
-                and extracts the revenue based on purchase event = 1. It uses inbuilt python split function.
-                Extracted Revenue part is then casted. 
-            If the product_list does not contain any revenue or if number_of_items is zero then
+            Function get_revenue() accepts 'product_list (products)' and 'event_list(event)' 
+                row value from the original dataset and extracts the revenue 
+                based on purchase event = 1. It uses inbuilt python split function.
+                Extracted Revenue part is then casted to Float. 
+                Function also checks for multiple products in a given row and aggregates revenue based on it.
+            If the product_list is blank or event_list <> 1 then revenue is 0.
             the default revenue return value is 0 
         """        
 
-        if elist == 1.0 and not pd.isnull(plist):  
-            arr = plist.split(';')
-            if arr[2] =='' or arr[2] is None: 
-                arr[2] = '0'
-            if arr[3] == '' or arr[3] is None: 
-                arr[3] = '0.0'
-            return (int(arr[2]) * float(arr[3])) 
-        return 0
+        rev = 0.0     
+        if event == 1.0 and products != '':
+            nproduct = products.split(',')
+            if len(nproduct) == 1:
+                arr = products.split(';')
+                if arr[3] == '' or arr[3] is None: 
+                    arr[3] = '0.0'
+                rev = float(arr[3]) 
+            else:
+                for i in nproduct:
+                    arr = ''
+                    arr = i.split(';')
+                    if arr[3] == '' or arr[3] is None: 
+                        arr[3] = '0.0'
+                    rev = rev + float(arr[3])
+                
+        return rev
 
     def writeDatatoS3(self, data_result,bucket):
         """
